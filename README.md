@@ -2,7 +2,7 @@
 Java challenge - Sequence search in a matrix
 
 
-#Objective
+# Objective
 The objective of this exercise is to find the longest sequence of values sorted in ascendant order in 
 adjacent coordinates of a matrix formed by randomly distributed numbers.
 The program should obtain the dimensions and the values of the matrix from the standard input and 
@@ -34,10 +34,13 @@ Example
 5 8 7
 6 9 1
 4 3 2
+
+
 Input:
 3 3
 5 8 7
 6 9 1
 4 3 2
+
 Output
 1 2 3 4
