@@ -31,6 +31,7 @@ number of elements;
 
 
 Example
+
 5  8  7
 
 6  9  1
@@ -39,6 +40,7 @@ Example
 
 
 Input:
+
 3 3
 
 5 8 7
@@ -49,4 +51,5 @@ Input:
 
 
 Output
+
 1 2 3 4
