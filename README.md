@@ -31,16 +31,22 @@ number of elements;
 
 
 Example
-5 8 7
-6 9 1
-4 3 2
+5  8  7
+
+6  9  1
+
+4  3  2
 
 
 Input:
 3 3
+
 5 8 7
+
 6 9 1
+
 4 3 2
+
 
 Output
 1 2 3 4
