@@ -7,6 +7,10 @@ import java.util.Arrays;
 
 public class SequenceSearch {
 
+    private SequenceSearch() {
+        //
+    }
+
     public static boolean process() {
         try
         {
@@ -18,13 +22,17 @@ public class SequenceSearch {
 
             //Read and validate the whole matrix
             int[][] matrix = readMatrix(matrixConfig);
-            if (matrix == null) return true;
+            if (Arrays.deepEquals(matrix, new int[][]{}))
+                return true;
 
             //sort
-            int[] output = sortMatrix(matrix,matrixConfig);
+            int[] sortedMatrixValues = sortMatrix(matrix,matrixConfig);
+
+            //find longest SS
+            int[] longestSS = longestSS(sortedMatrixValues);
 
             //print result
-            printOutput(output);
+            printOutput(longestSS);
 
             return true;
         }
@@ -35,13 +43,13 @@ public class SequenceSearch {
     }
 
     public static int[] sortMatrix(int[][] matrix, MatrixSizeModel matrixConfig) {
-        int allValues[] = new int[matrixConfig.getRowLen() * matrixConfig.getColLen()];
+        int[] allValues = new int[matrixConfig.getRowLen() * matrixConfig.getColLen()];
 
         // retrieve matrix elements
         int n = 0;
-        for(int row = 0; row< matrix.length; row++)
-            for(int col = 0; col< matrix[row].length; col++)
-                allValues[n++] = matrix[row][col];
+        for (int[] row : matrix)
+            for (int col : row)
+                allValues[n++] = col;
 
         //sort all values
         Arrays.sort(allValues);
@@ -49,25 +57,50 @@ public class SequenceSearch {
         return allValues;
     }
 
+    public static int[] longestSS(int[] sortedValues) {
+        int startOfLongestSS = 0;
+        int endOfLongestSS = 0;
+        int lengthOfLongestSS = 0;
+        int lengthOfCurrentSS = 0;
+
+        for (int i = 1; i < sortedValues.length; i++) {
+            if (sortedValues[i] == sortedValues[i - 1] + 1) {
+                ++lengthOfCurrentSS;
+            } else {
+
+                if (lengthOfCurrentSS > lengthOfLongestSS) {
+                    lengthOfLongestSS = lengthOfCurrentSS + 1;
+                    endOfLongestSS = i;
+                    startOfLongestSS = endOfLongestSS - lengthOfLongestSS + 1;
+                } else {
+                    lengthOfCurrentSS = 0;
+                }
+            }
+        }
+
+        return Arrays.copyOfRange(sortedValues, startOfLongestSS, endOfLongestSS);
+    }
+
 
     private static void printOutput(int[] output) {
         StringBuilder st= new StringBuilder();
-        for(int x = 0; x< output.length; x++)
-            st.append(output[x] + " ");
 
-        System.out.println(st.toString());
+        for (int x : output)
+            st.append(x).append(" ");
+
+        System.out.println(st);
     }
 
     private static int[][] readMatrix(MatrixSizeModel matrixConfig) {
         try{
             int[][] vars = new int[matrixConfig.getRowLen()][matrixConfig.getColLen()];
-            int row,col =0;
+            int row;
             for(row=0; row < matrixConfig.getRowLen(); row++){
                 String[] checkInput = getInput().split(" ");
 
                 if(checkInput.length != matrixConfig.getColLen()) {
-                    System.out.println("Columns numbers differs from specifieds.");
-                    return null;
+                    System.out.println("Columns numbers differs from specified.");
+                    return new int[0][0];
                 }
 
                 for (int x=0; x<checkInput.length; x++)
@@ -75,10 +108,10 @@ public class SequenceSearch {
             }
 
             return vars;
-        }
-        catch(Exception e){
+
+        } catch(Exception e){
             System.out.println(e.getMessage());
-            return null;
+            return new int[0][0];
         }
 
     }
@@ -95,7 +128,7 @@ public class SequenceSearch {
             MatrixSizeModel matrixConfig = new MatrixSizeModel();
 
             if(checkInput.length != 2){
-                System.out.println("Please enter matrix size splitted by space.");
+                System.out.println("Please enter matrix size split by space.");
                 return null;
             }
 
