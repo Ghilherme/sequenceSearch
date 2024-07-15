@@ -29,7 +29,7 @@ public class SequenceSearch {
             int[] sortedMatrixValues = sortMatrix(matrix,matrixConfig);
 
             //find longest SS
-            int[] longestSS = longestSS(sortedMatrixValues);
+            int[] longestSS = longestSearchSequence(sortedMatrixValues);
 
             //print result
             printOutput(longestSS);
@@ -57,25 +57,31 @@ public class SequenceSearch {
         return allValues;
     }
 
-    public static int[] longestSS(int[] sortedValues) {
+    public static int[] longestSearchSequence(int[] sortedValues) {
         int startOfLongestSS = 0;
         int endOfLongestSS = 0;
         int lengthOfLongestSS = 0;
         int lengthOfCurrentSS = 0;
+        int startOfCurrentSS = 0;
 
         for (int i = 1; i < sortedValues.length; i++) {
             if (sortedValues[i] == sortedValues[i - 1] + 1) {
                 ++lengthOfCurrentSS;
             } else {
-
                 if (lengthOfCurrentSS > lengthOfLongestSS) {
-                    lengthOfLongestSS = lengthOfCurrentSS + 1;
+                    lengthOfLongestSS = lengthOfCurrentSS;
+                    startOfLongestSS = startOfCurrentSS;
                     endOfLongestSS = i;
-                    startOfLongestSS = endOfLongestSS - lengthOfLongestSS + 1;
-                } else {
-                    lengthOfCurrentSS = 0;
                 }
+                startOfCurrentSS = i;
+                lengthOfCurrentSS = 1;
             }
+        }
+
+        // Check the last sequence
+        if (lengthOfCurrentSS > lengthOfLongestSS) {
+            startOfLongestSS = startOfCurrentSS;
+            endOfLongestSS = sortedValues.length;
         }
 
         return Arrays.copyOfRange(sortedValues, startOfLongestSS, endOfLongestSS);
